@@ -4,10 +4,11 @@
     <img src="../../assets/Logo.png" alt="LOGO" />
     <!-- 登录页 用户表单 -->
     <van-nav-ber title="登录" />
-    <form action="/" method="POST">
+    <form action="/" method="POST" ref="loginForm" :model="loginForm" :rules="loginRules">
       <van-cell-group>
         <van-field
-          v-model="user.username"
+          v-model="loginForm.username"
+          prop="account"
           clearable
           label="用户名"
           right-icon="question-o"
@@ -18,8 +19,9 @@
         />
 
         <van-field
-          v-model="user.password"
+          v-model="loginForm.password"
           clearable
+          prop="code"
           type="password"
           label="密码"
           right-icon="question-o"
@@ -28,7 +30,12 @@
           @click-right-icon="$toast('密码必须是数字、字母、下划线')"
           @touchstart.native.stop="show = true"
         />
-        <van-number-keyboard v-model="user.password" :show="show" :maxlength="12" @blur="show = false" />
+        <van-number-keyboard
+          v-model="user.password"
+          :show="show"
+          :maxlength="12"
+          @blur="show = false"
+        />
         <!--登录按钮-->
         <div class="pd15">
           <van-button
@@ -70,18 +77,61 @@
 export default {
   name: "LoginIndex",
   data() {
-    return {
-      user: {
-        username: "",
-        password: ""
+      const checkuser = (rule, value, callback) => {
+        // 逻辑校验
+        if (/^1[3-9]\d{9}$/.test(value)) {
+          callback()
+        } else {
+          callback(new Error('账号格式不对'))
+          }
+      };
+      return {
+        // 表单对应对象
+        loginForm: {
+          account:'17331038189',
+          code: '246810'
+        },
+        // 表单的校验规则对象
+        loginRules: {
+          account: [
+            // 具体校验规则 长度 格式等
+            {required: true, message: '账号必填', tigger:'blur'}, 
+            {validator: checkMobile, trigger:'blur'}
+          ],
+          code: [
+            { required: true, message: '密码必填', trigger: 'blur' },
+            { len: 6, message: '必须是6位', trigger: 'blur' }
+          ]
+        }
       }
-    };
   },
   methods: {
-      onClickButtonSubmit() {
-          this.$router.push({path: '/Home'})
-      }
-  }
+    login() {
+      // 整体表单的校验
+      this.$refs.loginForm.validate(valid => {
+        if(valid) {
+          // 校验成功 进行登录
+          this.$http
+          .post(
+              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+              this.loginForm
+          )
+          .then(res => {
+            // res响应对象
+            const data = res.data
+            console.log(data)
+            // 登录成功,跳转至首页, 保存登录状态
+            this.$router.push('/')
+          })
+          .catch(() => {
+            // 提示错误
+            this.$message.error('用户名或密码错误')
+          })
+        }
+      })
+    }
+  },
+
 };
 </script>
 
