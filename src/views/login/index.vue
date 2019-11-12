@@ -31,17 +31,21 @@
           @touchstart.native.stop="show = true"
         />
         <van-number-keyboard
-          v-model="user.password"
+          v-model="loginForm.password"
           :show="show"
-          :maxlength="12"
+          theme="custom"
+          extra-key="."
+          close-button-text="完成"
           @blur="show = false"
+          @input="onInput"
+          @delete="onDelete"
         />
         <!--登录按钮-->
         <div class="pd15">
           <van-button
             color="linear-gradient(to right, #4bb0ff, #6149f6)"
             size="large"
-            @click="onClickButtonSubmit"
+            @click.prevent="handleLogin"
             style="border-radius: 3px;"
           >登录</van-button>
           <van-button
@@ -73,65 +77,31 @@
   </div>
 </template>
 
+
 <script>
+import { login } from "@/api/user";
+
 export default {
   name: "LoginIndex",
   data() {
-      const checkuser = (rule, value, callback) => {
-        // 逻辑校验
-        if (/^1[3-9]\d{9}$/.test(value)) {
-          callback()
-        } else {
-          callback(new Error('账号格式不对'))
-          }
-      };
-      return {
-        // 表单对应对象
-        loginForm: {
-          account:'17331038189',
-          code: '246810'
-        },
-        // 表单的校验规则对象
-        loginRules: {
-          account: [
-            // 具体校验规则 长度 格式等
-            {required: true, message: '账号必填', tigger:'blur'}, 
-            {validator: checkMobile, trigger:'blur'}
-          ],
-          code: [
-            { required: true, message: '密码必填', trigger: 'blur' },
-            { len: 6, message: '必须是6位', trigger: 'blur' }
-          ]
-        }
+    return {
+      loginForm: {
+        username: "",
+        password: ""
       }
+    };
   },
   methods: {
-    login() {
-      // 整体表单的校验
-      this.$refs.loginForm.validate(valid => {
-        if(valid) {
-          // 校验成功 进行登录
-          this.$http
-          .post(
-              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
-              this.loginForm
-          )
-          .then(res => {
-            // res响应对象
-            const data = res.data
-            console.log(data)
-            // 登录成功,跳转至首页, 保存登录状态
-            this.$router.push('/')
-          })
-          .catch(() => {
-            // 提示错误
-            this.$message.error('用户名或密码错误')
-          })
-        }
-      })
+    async handleLogin() {
+      try {
+        const data = await login(this.loginForm);
+        console.log(data);
+        this.$store.commit("setUser", data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  },
-
+  }
 };
 </script>
 
@@ -143,7 +113,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  background: url("../../assets/Login_Bg.jpg") no-repeat center / cover;
+  background: url("./Login_Bg.jpg") no-repeat center / cover;
 
   img {
     width: 3.6rem;

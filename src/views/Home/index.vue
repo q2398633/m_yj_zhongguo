@@ -1,4 +1,3 @@
-
 <template>
   <div class="Home_Index">
     <!-- 导航栏 -->
@@ -31,46 +30,48 @@
     </div>
     <div class="menu_Layout">
       <div class="flex">
-        <van-button icon="star-o" type="primary" />
+        <van-button icon="star-o" type="primary" round />
       </div>
       <div class="flex">
-        <van-button icon="star-o" type="info" />
+        <van-button icon="star-o" type="info" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" type="warning" />
+        <van-button icon="star-o" type="warning" round />
       </div>
       <div class="flex">
-        <van-button icon="star-o" type="danger" />
+        <van-button icon="star-o" type="danger" round />
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="#7232dd" />
+        <van-button icon="star-o" color="#7232dd" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to right, #4bb0ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to right, #4bb0ff, #6149f6)" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to left, #4bb0ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to left, #4bb0ff, #6149f6)" round />
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to top, #4bb0ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to top, #4bb0ff, #6149f6)" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to bottom, #4bb0ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to bottom, #4bb0ff, #6149f6)" round />
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to right, #4ab0ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to right, #4ab0ff, #6149f6)" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to right, #4ab0ff, #3149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to right, #4ab0ff, #3149f6)" round/>
       </div>
       <div class="flex">
-        <van-button icon="star-o" color="linear-gradient(to right, #1a20ff, #6149f6)" />
+        <van-button icon="star-o" color="linear-gradient(to right, #1a20ff, #6149f6)" round/>
       </div>
     </div>
-    <div style="clear:both"></div>
+   
     <!-- 图表 -->
     <div class="echarts">
-      <div class="echarts_left">图表</div>
+      <div class="echarts_content" ref="bar">
+
+      </div>
     </div>
     <!-- 底部菜单 -->
     <div class="menu_bottom">
@@ -79,7 +80,7 @@
   </div>
 </template>
 
-<script src=""></script>
+
 <script>
 export default {
   name: "HomeIndex",
@@ -92,6 +93,7 @@ export default {
 };
 </script>
 
+
 <style lang="less" scoped>
 .Home_Index {
   width: 100%;
@@ -102,6 +104,10 @@ export default {
   top: 0;
   background: url("../../assets/Login_Bg4.jpg") no-repeat center / cover;
 }
+.Layout_RC {
+  padding: 18px;
+}
+
 .van-swipe-item {
   img {
     width: 100%;
@@ -136,10 +142,14 @@ export default {
     width: 25%;
     display: inline-block;
   }
-  .van-button {
-    // margin-right: 45px;
-  }
+
   .echarts {
+
+    .echarts_content {
+      width: 600px;
+      height: 400px;
+    }
+
   }
   .menu_bottom {
     width: 100%;
@@ -148,4 +158,5 @@ export default {
     bottom: 0;
   }
 }
+
 </style>
